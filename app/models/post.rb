@@ -1,5 +1,10 @@
 class Post < ApplicationRecord
 
+  belongs_to :user
+  belongs_to :genre
+  has_many :comments, dependent: :destroy
+  has_many :bookmarks, dependent: :destroy
+
   has_one_attached :post_image
 
   def get_post_image(width, height)
