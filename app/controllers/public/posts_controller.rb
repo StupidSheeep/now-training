@@ -5,7 +5,6 @@ class Public::PostsController < ApplicationController
 
   def show
     @post = Post.find(params[:id])
-    @genre = Genre.find(@post.genre_id)
   end
 
   def new

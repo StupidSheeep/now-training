@@ -1,0 +1,11 @@
+<% post.comments.each do |comment| %>
+  <div class="media">
+    <div class="media-body">
+      <%= comment.post_comment %> <!-- ここを修正 -->
+      <% if comment.user == current_user %>
+        <%= link_to "destroy", post_comment_path(post, comment), method: :delete, class: "btn btn-sm btn-danger", remote: true, data: {"turbolinks" => false} %>
+      <% end %>
+    </div>
+  </div>
+  <span><%= comment.user.name %></span>
+<% end %>

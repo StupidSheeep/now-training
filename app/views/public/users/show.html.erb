@@ -1,8 +1,19 @@
 <h2>マイページ</h2>
 <div class="container">
-  <div>
-    <%= image_tag @books.user.get_profile_image, size:"100x100" %><br>
-    <%= @books.user.name %>
+  <div class = "row">
+    <% if @user.profile_image.attached? %>
+      <%= image_tag @user.get_profile_image(100, 100) %><br>
+    <% else %>
+      <%= image_tag @user.get_profile_image(100, 100) %><br>
+    <% end %>
+    <%= @user.name %>
   </div>
-
+  <div class = "row">
+    <h2>投稿一覧</h2>
+    <% @user.posts.each do |post| %>
+      <%= post.title %>
+      <%= post.target_time %>
+      <%= post.genre.name %>
+    <% end %>
+  </div>
 </div>

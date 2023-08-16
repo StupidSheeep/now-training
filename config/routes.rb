@@ -23,9 +23,10 @@ Rails.application.routes.draw do
     patch "users/withdrawal", to: "users#withdrawal"
 
 
-    resources :posts
-    resources :comments
-    resources :bookmarks
+    resources :posts do
+      resources :comments,only: [:create,:destroy]
+      resources :bookmarks
+    end
     resources :relationships
   end
 
