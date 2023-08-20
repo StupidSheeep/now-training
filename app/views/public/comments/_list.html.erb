@@ -1,0 +1,14 @@
+<% post.comments.each do |comment| %>
+  <div class="media">
+    <div class="media-body">
+      <%= link_to users_my_page_path(comment.user) do %>
+        <%= image_tag comment.user.get_profile_image(45,45),class: "rounded-circle user-avatar" %>
+      <% end %>
+      <%= comment.post_comment %>
+      <% if comment.user == current_user %>
+        <%= link_to "destroy", post_comment_path(post, comment), method: :delete, class: "btn btn-sm btn-danger", remote: true, data: {"turbolinks" => false} %>
+      <% end %>
+    </div>
+  </div>
+  <span><%= comment.user.name %></span>
+<% end %>

@@ -1,0 +1,41 @@
+<h2>トレーニング内容</h2>
+<div class="container">
+  <div class="row">
+    <div>
+      <label>タイトル</label>
+      <%= @post.title %>
+    </div>
+    <div>
+      <label>目標時間</label>
+      <%= @post.target_time %>分
+    </div>
+    <div>
+      <label>難易度</label>
+      <%= @post.genre.name %>
+    </div>
+    <div>
+      <label>内容</label>
+      <%= @post.body %>
+    </div>
+    <div>
+      <label>投稿日</label>
+      <%= @post.created_at.strftime('%Y年%m月%d日') %>
+    </div>
+  </div>
+  <div class="row">
+    <div id="post_comment" >
+      <%= render "public/comments/list", post: @post %>
+    </div>
+
+    <% if user_signed_in? %>
+      <div id="post_comment" >
+        <%= render "public/comments/comment", post: @post %>
+      </div>
+    <% end %>
+
+    <% if user_signed_in? && current_user == @post.user %>
+      <%= link_to "編集", edit_post_path(@post), class: "btn btn-primary" %>
+      <%= link_to "削除", post_path(@post), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-danger" %>
+    <% end %>
+  </div>
+</div>
