@@ -4,7 +4,9 @@
 
     <% @post.each do |post| %>
       <div class="col-2">
-        <%= image_tag post.user.get_profile_image(100, 100), class: "user-avatar" %>
+        <%= link_to users_my_page_path(post.user) do %>
+          <%= image_tag post.user.get_profile_image(100, 100), class: "rounded-circle user-avatar" %>
+        <% end %>
       </div>
       <div class="col-10">
         <h3><%= post.title %></h3>

@@ -3,9 +3,9 @@
   <div class = "row">
     <div class = "col-3">
       <% if @user.profile_image.attached? %>
-        <%= image_tag @user.get_profile_image(250, 250) %><br>
+        <%= image_tag @user.get_profile_image(250, 250), class: "rounded-circle user-avatar" %><br>
       <% else %>
-        <%= image_tag @user.get_profile_image(250, 250) %><br>
+        <%= image_tag @user.get_profile_image(250, 250), class: "rounded-circle user-avatar" %><br>
       <% end %>
       <%= @user.name %>
       <% if current_user != @user %> <!-- ログインユーザーと表示しているユーザーが同じでない場合にボタンを表示 -->
