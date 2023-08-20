@@ -18,6 +18,31 @@ class User < ApplicationRecord
 
   has_one_attached :profile_image
 
+
+  # ユーザーをフォローしているかどうかを判定するメソッド
+  def following?(other_user)
+    following.include?(other_user)
+  end
+
+  # ユーザーをフォローするメソッド
+  def follow(other_user)
+    following << other_user
+  end
+
+  # ユーザーのフォローを解除するメソッド
+  def unfollow(other_user)
+    following.delete(other_user)
+  end
+
+  def followers_count
+    followers.count
+  end
+
+  def following_count
+    following.count
+  end
+
+
   def get_profile_image(width, height)
     unless profile_image.attached?
       file_path = Rails.root.join('app/assets/images/no_image.jpg')

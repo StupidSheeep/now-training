@@ -1,6 +1,7 @@
 class Public::PostsController < ApplicationController
 
   def index
+    @post = Post.all
   end
 
   def show
@@ -25,9 +26,26 @@ class Public::PostsController < ApplicationController
   end
 
   def edit
+    @post = Post.find(params[:id])
+    @genres = Genre.all
   end
 
   def update
+    @post = Post.find(params[:id])
+    if @post.update(post_params)
+      redirect_to post_path(@post), notice: "内容を更新しました。"
+    else
+      render 'edit'
+    end
+  end
+
+  def destroy
+    @post = Post.find(params[:id])
+    if @post.destroy
+      redirect_to users_my_page_path(current_user), notice: "投稿を削除しました。"
+    else
+      redirect_to post_path(@post), alert: "投稿の削除に失敗しました。"
+    end
   end
 
   private

@@ -1,7 +1,10 @@
 <% post.comments.each do |comment| %>
   <div class="media">
     <div class="media-body">
-      <%= comment.post_comment %> <!-- ここを修正 -->
+      <%= link_to user_path(@user) do %>
+        <%= image_tag comment.user.get_profile_image(45,45) %>
+      <% end %>
+      <%= comment.post_comment %>
       <% if comment.user == current_user %>
         <%= link_to "destroy", post_comment_path(post, comment), method: :delete, class: "btn btn-sm btn-danger", remote: true, data: {"turbolinks" => false} %>
       <% end %>

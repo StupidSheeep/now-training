@@ -7,7 +7,7 @@
     </div>
     <div>
       <label>目標時間</label>
-      <%= @post.target_time %>
+      <%= @post.target_time %>分
     </div>
     <div>
       <label>難易度</label>
@@ -26,10 +26,16 @@
     <div id="post_comment" >
       <%= render "public/comments/list", post: @post %>
     </div>
-    <div id="post_comment" >
-      <%= render "public/comments/comment", post: @post %>
-    </div>
 
+    <% if user_signed_in? %>
+      <div id="post_comment" >
+        <%= render "public/comments/comment", post: @post %>
+      </div>
+    <% end %>
 
+    <% if user_signed_in? && current_user == @post.user %>
+      <%= link_to "編集", edit_post_path(@post), class: "btn btn-primary" %>
+      <%= link_to "削除", post_path(@post), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-danger" %>
+    <% end %>
   </div>
 </div>

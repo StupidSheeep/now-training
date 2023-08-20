@@ -21,13 +21,17 @@ Rails.application.routes.draw do
     patch "users/my_page", to: "users#update"
     get "users/check", to: "users#check"
     patch "users/withdrawal", to: "users#withdrawal"
+    get "user", to: "users#index"
 
 
     resources :posts do
-      resources :comments,only: [:create,:destroy]
-      resources :bookmarks
+      resources :comments,only: [:create, :destroy]
+      resource :bookmarks, only: [:create, :destroy]
     end
-    resources :relationships
+    resources :relationships, only: [:create, :destroy]
+      post 'follow', to: 'relationships#create', as: 'follow_user'
+      delete 'unfollow', to: 'relationships#destroy', as: 'unfollow_user'
+
   end
 
   namespace :admin do
