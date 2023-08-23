@@ -1,3 +1,4 @@
+<!-- app/views/admin/users/index.html.erb -->
 <div class="container">
   <div class="row">
     <h2 class="mt-5 mb-5">会員一覧</h2>
@@ -8,6 +9,7 @@
           <th class="text-center">ユーザー名</th>
           <th class="text-center">投稿数</th>
           <th class="text-center">合計ブックマーク数</th>
+          <th class="text-center">退会ステータス</th>
         </tr>
       </thead>
       <tbody>
@@ -17,7 +19,7 @@
               <%= user.created_at.strftime("%Y-%m-%d") %>
             </td>
             <td class="text-center">
-              <%= user.name %>
+              <%= link_to user.name, admin_user_path(user) %>
             </td>
             <td class="text-center">
               <% total_posts = user.posts.count %>
@@ -30,6 +32,12 @@
               <% end %>
               <%= total_bookmarks %>
             </td>
+            <td class="text-center">
+              <%= link_to toggle_status_admin_user_path(user), method: :patch, data: { confirm: "ユーザーのステータスを切り替えますか？" }, class: "btn btn-sm #{user.is_deleted? ? 'btn-success' : 'btn-danger'}" do %>
+                <%= user.is_deleted? ? '有効にする' : '退会にする' %>
+              <% end %>
+            </td>
+
           </tr>
         <% end %>
       </tbody>

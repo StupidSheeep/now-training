@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -62,10 +63,6 @@
         <label>投稿日</label>
         <%= @post.created_at.strftime('%Y年%m月%d日') %>
       </div>
-      <% if user_signed_in? && current_user == @post.user %>
-        <%= link_to "編集", edit_post_path(@post), class: "btn btn-primary" %>
-        <%= link_to "削除", post_path(@post), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-danger" %>
-      <% end %>
     </div>
     <div class="comments-list">
       <h4 class="comments-title">コメントリスト</h4>
@@ -79,4 +76,8 @@
       <% end %>
     </div>
   </div>
+  <div class="container">
+    <%= link_to '投稿削除', admin_post_path(@post), method: :delete, data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger' %>
+  </div>
 </body>
+</html>

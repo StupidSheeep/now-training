@@ -17,8 +17,8 @@ Rails.application.routes.draw do
     root :to => "homes#top"
     get "about", to: "homes#about"
     get "users/my_page/:id", to: "users#show", as: "users_my_page"
-    get "users/my_page/edit", to: "users#edit"
-    patch "users/my_page", to: "users#update"
+    get "users/my_page/edit/:id", to: "users#edit", as: "users_my_page_edit"
+    patch "users/my_page/edit/:id", to: "users#update"
     get "users/check", to: "users#check"
     patch "users/withdrawal", to: "users#withdrawal"
     get "user", to: "users#index"
@@ -36,7 +36,11 @@ Rails.application.routes.draw do
 
   namespace :admin do
     root :to =>  'homes#top'
-    resources :users
+    resources :users do
+      member do
+        patch 'toggle_status'
+      end
+    end
     resources :posts
     resources :genres
     resources :comments

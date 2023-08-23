@@ -18,6 +18,14 @@ class User < ApplicationRecord
 
   has_one_attached :profile_image
 
+  def active_for_authentication?
+    super && !is_deleted?
+  end
+
+  def inactive_message
+    is_deleted? ? :deleted : super
+  end
+
 
   # ユーザーをフォローしているかどうかを判定するメソッド
   def following?(other_user)

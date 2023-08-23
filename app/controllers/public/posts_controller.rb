@@ -2,6 +2,7 @@ class Public::PostsController < ApplicationController
 
   def index
     @post = Post.all
+    @user = User.all
   end
 
   def show
@@ -51,7 +52,7 @@ class Public::PostsController < ApplicationController
   private
 
   def post_params
-    params.require(:post).permit(:title, :body, :target_time, :genre_id)
+    params.require(:post).permit(:title, :body, :target_time, :level, :genre_id)
   end
 
 

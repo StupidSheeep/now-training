@@ -1,84 +1,98 @@
-<h1 class = "text-center mt-5 mb-5">マイページ</h1>
-<div class = "container">
-  <div class = "row">
-    <div class = "col-3">
-      <% if @user.profile_image.attached? %>
-        <%= image_tag @user.get_profile_image(250, 250), class: "rounded-circle user-avatar" %><br>
-      <% else %>
-        <%= image_tag @user.get_profile_image(250, 250), class: "rounded-circle user-avatar" %><br>
-      <% end %>
-      <%= @user.name %>
-      <% if current_user != @user %> <!-- ログインユーザーと表示しているユーザーが同じでない場合にボタンを表示 -->
-        <% if current_user.following?(@user) %> <!-- ログインユーザーが表示しているユーザーをフォローしているかどうかの判定 -->
-          <%= link_to "アンフォロー", relationship_path(current_user.active_relationships.find_by(followed_id: @user.id)), method: :delete %>
-        <% else %>
-          <%= link_to "フォロー", relationships_path(followed_id: @user.id), method: :post %>
-        <% end %>
-      <% end %>
-    </div>
-
-    <div class = "col-9">
-      <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link active" id="home-tab" data-toggle="tab" href="#posts" role="tab" aria-controls="posts" aria-selected="true">投稿一覧</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="bookmark-tab" data-toggle="tab" href="#bookmark" role="tab" aria-controls="bookmark" aria-selected="false">ブックマーク</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="followed-tab" data-toggle="tab" href="#followed" role="tab" aria-controls="followed" aria-selected="false">フォロー</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="follower-tab" data-toggle="tab" href="#follower" role="tab" aria-controls="follower" aria-selected="false">フォロワー</a>
-        </li>
-      </ul>
-
-      <div class="tab-content" id="myTabContent">
-        <!-- 投稿一覧タブ-->
-        <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
-          <% @user.posts.each do |post| %>
-            <p><%= post.title %></p>
-            <p><%= post.target_time %></p>
-            <p><%= post.genre.name %></p>
-            <% if current_user.bookmarks.exists?(post_id: post.id) %>
-              <%= link_to "Unlike", post_bookmarks_path(post, current_user.bookmarks.find_by(post: post)), method: :delete %>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <h1 class="text-center mt-5 mb-5">マイページ</h1>
+      <div class="row">
+        <div class="col-md-4">
+          <% if @user.profile_image.attached? %>
+            <%= image_tag @user.profile_image, class: "rounded-circle rounded user-avatar", size: "250x250" %><br>
+          <% else %>
+            <%= image_tag @user.get_profile_image(250, 250), class: "rounded-circle user-avatar" %><br>
+          <% end %>
+          <%= @user.name %>
+          <p>自己紹介</p>
+          <%= @user.introduction %>
+          <% if @user == current_user %>
+            <%= link_to "プロフィール編集", users_my_page_edit_path(@user.id), class: "btn btn-primary" %>
+          <% end %>
+          <% if current_user != @user %>
+            <% if current_user.following?(@user) %>
+              <%= link_to "アンフォロー", relationship_path(current_user.active_relationships.find_by(followed_id: @user.id)), method: :delete %>
             <% else %>
-              <%= link_to "Like", post_bookmarks_path(post), method: :post %>
+              <%= link_to "フォロー", relationships_path(followed_id: @user.id), method: :post %>
             <% end %>
-            <%= link_to "内容を見る", post_path(post), class: "btn btn-primary" %>
           <% end %>
         </div>
-        <!-- ブックマークタブ-->
-        <div class="tab-pane fade" id="bookmark" role="tabpanel" aria-labelledby="bookmark-tab">
-          <% @bookmarks.each do |post| %>
-            <p><%= post.title %></p>
-            <p><%= post.target_time %></p>
-            <p><%= post.genre.name %></p>
-            <p><%= post.user.name %></p>
-            <%= link_to "Unlike", post_bookmarks_path(post, current_user.bookmarks.find_by(post: post)), method: :delete %>
-            <%= link_to "内容を見る", post_path(post), class: "btn btn-primary" %>
-          <% end %>
-        </div>
-        <!-- フォロータブ-->
-        <div class="tab-pane fade" id="followed" role="tabpanel" aria-labelledby="followed-tab">
-          <h3><%= @user.name %>のフォロー一覧</h3>
-          <% @user.following.each do |following_user| %>
-            <p><%= link_to following_user.name, users_my_page_path(following_user) %></p>
-            <p>フォロー数: <%= @user.following_count %></p>
-            <p>フォロワー数: <%= @user.followers_count %></p>
-          <% end %>
-        </div>
-        <!-- フォロワータブ-->
-        <div class="tab-pane fade" id="follower" role="tabpanel" aria-labelledby="follower-tab">
-          <h3><%= @user.name %>をフォローしているユーザー一覧</h3>
-          <% @user.followers.each do |follower_user| %>
-            <p><%= link_to follower_user.name, users_my_page_path(follower_user) %></p>
-            <p>フォロー数: <%= @user.following_count %></p>
-            <p>フォロワー数: <%= @user.followers_count %></p>
-          <% end %>
+        <div class="col-md-8">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="home-tab" data-toggle="tab" href="#posts" role="tab" aria-controls="posts" aria-selected="true">投稿一覧</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="bookmark-tab" data-toggle="tab" href="#bookmark" role="tab" aria-controls="bookmark" aria-selected="false">ブックマーク</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="followed-tab" data-toggle="tab" href="#followed" role="tab" aria-controls="followed" aria-selected="false">フォロー</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="follower-tab" data-toggle="tab" href="#follower" role="tab" aria-controls="follower" aria-selected="false">フォロワー</a>
+            </li>
+          </ul>
+          <div class="tab-content px-3 py-4" id="myTabContent">
+            <!-- 投稿一覧タブ-->
+            <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
+              <% @user.posts.each do |post| %>
+                <p><%= post.title %></p>
+                <p><%= post.target_time %></p>
+                <p><%= post.level %></p>
+                <p><%= post.genre.name %></p>
+                <% if current_user.bookmarks.exists?(post_id: post.id) %>
+                  <%= link_to "Unlike", post_bookmarks_path(post, current_user.bookmarks.find_by(post: post)), method: :delete %>
+                <% else %>
+                  <%= link_to "Like", post_bookmarks_path(post), method: :post %>
+                <% end %>
+                <%= link_to "内容を見る", post_path(post), class: "btn btn-primary" %>
+              <% end %>
+            </div>
+            <!-- ブックマークタブ-->
+            <div class="tab-pane fade" id="bookmark" role="tabpanel" aria-labelledby="bookmark-tab">
+              <% @bookmarks.each do |post| %>
+                <p><%= post.title %></p>
+                <p><%= post.target_time %></p>
+                <p><%= post.level %></p>
+                <p><%= post.genre.name %></p>
+                <p><%= post.user.name %></p>
+                <%= link_to "Unlike", post_bookmarks_path(post, current_user.bookmarks.find_by(post: post)), method: :delete %>
+                <%= link_to "内容を見る", post_path(post), class: "btn btn-primary" %>
+              <% end %>
+            </div>
+            <!-- フォロータブ-->
+            <div class="tab-pane fade" id="followed" role="tabpanel" aria-labelledby="followed-tab">
+              <h3><%= @user.name %>のフォロー一覧</h3>
+              <% @user.following.each do |following_user| %>
+                <%= link_to users_my_page_path(following_user) do %>
+                  <%= image_tag following_user.get_profile_image(100, 100), class: "rounded-circle user-avatar" %>
+                <% end %>
+                <p><%= link_to following_user.name, users_my_page_path(following_user) %></p>
+                <p>フォロー数: <%= @user.following_count %></p>
+                <p>フォロワー数: <%= @user.followers_count %></p>
+              <% end %>
+            </div>
+            <!-- フォロワータブ-->
+            <div class="tab-pane fade" id="follower" role="tabpanel" aria-labelledby="follower-tab">
+              <h3><%= @user.name %>をフォローしているユーザー一覧</h3>
+              <% @user.followers.each do |follower_user| %>
+                <%= link_to users_my_page_path(follower_user) do %>
+                  <%= image_tag follower_user.get_profile_image(100, 100), class: "rounded-circle user-avatar" %>
+                <% end %>
+                <p><%= link_to follower_user.name, users_my_page_path(follower_user) %></p>
+                <p>フォロー数: <%= @user.following_count %></p>
+                <p>フォロワー数: <%= @user.followers_count %></p>
+              <% end %>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
   </div>
 </div>
