@@ -1,49 +1,64 @@
-<h1 class = "text-center mt-5 mb-5">みんなの投稿</h1>
-<div class = "container">
-  <div class = "row">
-
-    <% @post.each do |post| %>
-      <div class="col-2">
-        <%= link_to users_my_page_path(post.user) do %>
-          <%= image_tag post.user.get_profile_image(100, 100), class: "rounded-circle user-avatar" %>
+<h1 class="text-center mt-5 mb-5">みんなの投稿</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="row mb-3 justify-content-end">
+        <%= form_tag posts_path, method: :get do %>
+          <label for="genre_id">トレーニングジャンル：</label>
+          <%= select_tag "genre_id", options_from_collection_for_select(@genres, "id", "name", params[:genre_id]), include_blank: true %>
+          <%= submit_tag "絞り込む" %>
         <% end %>
       </div>
-      <div class="col-10">
-        <h3><%= post.title %></h3>
-        <div class="col-8">
-          <div class="row">
-            <div class="col-6">
-              目標時間：<%= post.target_time %> 分
+
+      <% @post.each do |post| %>
+        <div class="result-item card mb-3" style="border-radius: 20px; border: 3px solid #000080;">
+          <div class="profile-section d-flex align-items-center">
+            <div class="col-md-2">
+              <% if post.user.profile_image.attached? %>
+                <div class="profile-image mt-2 ml-2">
+                  <%= link_to users_my_page_path(post.user) do %>
+                    <%= image_tag post.user.profile_image, class: "img-fluid rounded-circle user-avatar", size:"145x145" %>
+                  <% end %>
+                </div>
+              <% else %>
+                <div class="profile-image mt-2 ml-2">
+                  <%= image_tag post.user.get_profile_image(145, 145), class: "rounded-circle user-avatar" %><br>
+                </div>
+              <% end %>
+              <div class="profile-title text-center">
+                <h4><%= post.user.name %></h4>
+              </div>
             </div>
-            <div class="col-6">
-              難易度：<%= post.genre.name %>
+            <div class="col-md-10">
+              <div class="card-body">
+                <h5 class="card-title"><%= post.title %></h5>
+                <p class="card-text">
+                  <span class="mr-3"><strong>目標時間：</strong><%= post.target_time %> 分</span>
+                  <span class="mr-3"><strong>トレーニングジャンル：</strong><%= post.genre.name %></span>
+                  <span class="mr-3"><strong>難易度：</strong><%= post.level %></span>
+                </p>
+                <p class="card-text">
+                  <span class="mr-3"><strong>コメント数:</strong> <%= post.comments.count %></span>
+                  <span class="mr-3"><strong>ブックマーク数:</strong> <%= post.bookmarks.count %></span>
+                </p>
+                <div class="action-buttons">
+                  <% if current_user %>
+                    <% if current_user.bookmarks.exists?(post_id: post.id) %>
+                      <%= link_to "ブックマークを外す", post_bookmarks_path(post, current_user.bookmarks.find_by(post: post)), method: :delete, class: "btn btn-outline-danger" %>
+                    <% else %>
+                      <%= link_to "ブックマーク", post_bookmarks_path(post), method: :post, class: "btn btn-outline-primary" %>
+                    <% end %>
+                  <% end %>
+                  <%= link_to "内容を見る", post_path(post), class: "btn btn-primary" %>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-8">
-          <div class="row">
-            <div class="col-6">
-              コメント数: <%= post.comments.count %>
-            </div>
-            <div class="col-6">
-              ブックマーク数: <%= post.bookmarks.count %>
-            </div>
-          </div>
-        </div>
-        <% if current_user %>
-          <% if current_user.bookmarks.exists?(post_id: post.id) %>
-            <%= link_to "ブックマークを外す", post_bookmarks_path(post, current_user.bookmarks.find_by(post: post)), method: :delete %>
-          <% else %>
-            <%= link_to "ブックマーク", post_bookmarks_path(post), method: :post %>
-          <% end %>
-        <% end %>
-        <%= link_to "内容を見る", post_path(post), class: "btn btn-primary" %>
+      <% end %>
+      <div class="pagination justify-content-center mb-5">
+        <%= paginate @post, theme: 'bootstrap-5' %>
       </div>
-      <div class="col-12 pb-5">
-        <%= post.user.name %>
-      </div>
-    <% end %>
-
-
+    </div>
   </div>
 </div>

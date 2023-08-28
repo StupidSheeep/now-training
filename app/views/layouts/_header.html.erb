@@ -1,10 +1,12 @@
 <!--ヘッダー画面-->
 <header>
-  <nav class="navbar navbar-expand-lg navbar-light" style="background-color:#DFD8C8;">
+  <nav class="navbar navbar-expand-lg navbar-light" style="background-color:#F6F1E9;">
     <div class="col-lg-3">
       <!--イラストロゴ-->
-      <div class="navbar-brand mb-auto">
-
+      <div class="navbar-brand mb-auto ml-5">
+        <%= link_to root_path do %>
+          <%= image_tag 'logo2.png', height: '100px' %>
+        <% end %>
       </div>
     </div>
 
@@ -17,7 +19,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
-          <ul class="navbar-nav">
+          <ul class="navbar-nav ml-auto">
             <% if admin_signed_in? %>
               <li><%= link_to '会員一覧', admin_root_path, class: "btn btn-outline-dark m-3" %></li>
               <li><%= link_to '投稿一覧', admin_posts_path, class: "btn btn-outline-dark m-3" %></li>
@@ -38,6 +40,23 @@
             <% end %>
           </ul>
         </div>
+        <% unless admin_signed_in? %>
+          <div class="col-auto mb-auto ml-lg-0">
+            <%= form_tag search_results_posts_path, method: :get, class: "form-inline my-2 my-lg-0" do %>
+              <%= label_tag :search_target, "検索対象", class: "sr-only" %>
+              <% target_options = {"タイトル" => "title", "本文" => "body", "レベル" => "level", "目標時間" => "target_time"} %>
+              <%= select_tag :search_target, options_for_select(target_options, params[:search_target]), class: "form-control mr-sm-2" %>
+
+              <%= label_tag :search, "キーワード", class: "sr-only" %>
+              <%= text_field_tag :search, params[:search], class: "form-control mr-sm-2", placeholder: "キーワードを入力して検索", "aria-label": "キーワード" %>
+
+              <%= label_tag :search_genre, "ジャンル", class: "sr-only" %>
+              <%= select_tag :search_genre, options_from_collection_for_select(Genre.all, "id", "name", params[:search_genre]), class: "form-control mr-sm-2", include_blank: "ジャンルを選択" %>
+
+              <%= submit_tag "検索", class: "btn btn-outline-dark my-2 my-sm-0" %>
+            <% end %>
+          </div>
+        <% end %>
       </div>
   </nav>
 </header>

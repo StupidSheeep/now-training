@@ -1,41 +1,73 @@
-<h2>トレーニング内容</h2>
-<div class="container">
-  <div class="row">
-    <div>
-      <label>タイトル</label>
-      <%= @post.title %>
-    </div>
-    <div>
-      <label>目標時間</label>
-      <%= @post.target_time %>分
-    </div>
-    <div>
-      <label>難易度</label>
-      <%= @post.genre.name %>
-    </div>
-    <div>
-      <label>内容</label>
-      <%= @post.body %>
-    </div>
-    <div>
-      <label>投稿日</label>
-      <%= @post.created_at.strftime('%Y年%m月%d日') %>
-    </div>
-  </div>
-  <div class="row">
-    <div id="post_comment" >
-      <%= render "public/comments/list", post: @post %>
-    </div>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>トレーニング内容</title>
+  <style>
+    .post-details {
+      padding: 2rem;
+    }
 
-    <% if user_signed_in? %>
-      <div id="post_comment" >
-        <%= render "public/comments/comment", post: @post %>
+    .comments-list {
+      border: 1px solid #ccc;
+      padding: 1rem;
+    }
+
+    .comment {
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .comments-title {
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8"> <!-- 投稿内容のカラム -->
+        <h2 class="mb-3 mt-3">トレーニング内容</h2>
+        <div class="post-details">
+          <div>
+            <h3><%= @post.title %></h3>
+          </div>
+          <div>
+            <span class="mr-3"><strong>目標時間：</strong><%= @post.target_time %>分</span>
+            <span class="mr-3"><strong>難易度：</strong><%= @post.level %></span>
+            <span class="mr-3"><strong>トレーニングジャンル：</strong><%= @post.genre.name %></span>
+          </div>
+          <div>
+            <h5 class="mt-3"><strong>内容</strong></h5>
+            <%= @post.body %>
+          </div>
+          <div class="mt-2">
+            <strong>投稿日</strong>
+            <%= @post.created_at.strftime('%Y年%m月%d日') %>
+          </div>
+          <div class="mt-5">
+            <% if user_signed_in? && current_user == @post.user %>
+              <%= link_to "編集", edit_post_path(@post), class: "btn btn-primary" %>
+              <%= link_to "削除", post_path(@post), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-danger" %>
+            <% end %>
+          </div>
+        </div>
       </div>
-    <% end %>
-
-    <% if user_signed_in? && current_user == @post.user %>
-      <%= link_to "編集", edit_post_path(@post), class: "btn btn-primary" %>
-      <%= link_to "削除", post_path(@post), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-danger" %>
-    <% end %>
+      <div class="col-md-4 mt-5"> <!-- コメントのカラム -->
+        <div class="comments-list">
+          <h4 class="comments-title">コメントリスト</h4>
+          <div class="comment">
+            <%= render "public/comments/list", post: @post  %>
+          </div>
+          <% if user_signed_in? %>
+            <div id="post_comment">
+              <%= render "public/comments/comment", post: @post %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+</body>
+</html>

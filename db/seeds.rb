@@ -9,8 +9,3 @@
    email: 'admin@test.com',
    password: 'admin123'
   })
-
-  Genre.create!({
-    id: '1',
-    name: "初級者"
-  })

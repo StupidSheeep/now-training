@@ -13,15 +13,21 @@ Rails.application.routes.draw do
     sessions: "admin/sessions"
   }
 
+  # ゲストログイン用
+  devise_scope :user do
+    post "users/guest_sign_in", to: "public/sessions#guest_sign_in"
+  end
+
     scope module: :public do
     root :to => "homes#top"
     get "about", to: "homes#about"
     get "users/my_page/:id", to: "users#show", as: "users_my_page"
-    get "users/my_page/edit", to: "users#edit"
-    patch "users/my_page", to: "users#update"
+    get "users/my_page/edit/:id", to: "users#edit", as: "users_my_page_edit"
+    patch "users/my_page/edit/:id", to: "users#update"
     get "users/check", to: "users#check"
     patch "users/withdrawal", to: "users#withdrawal"
     get "user", to: "users#index"
+    get 'search_results', to: 'posts#search_results', as: "search_results_posts"
 
 
     resources :posts do
@@ -36,10 +42,15 @@ Rails.application.routes.draw do
 
   namespace :admin do
     root :to =>  'homes#top'
-    resources :users
+    resources :users do
+      member do
+        patch 'toggle_status'
+      end
+    end
     resources :posts
     resources :genres
-    resources :comments
+    resources :comments, only: [:destroy]
+
   end
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

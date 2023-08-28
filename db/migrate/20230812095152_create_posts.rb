@@ -7,6 +7,7 @@ class CreatePosts < ActiveRecord::Migration[6.1]
       t.string  :title, null: false
       t.text  :body,  null: false
       t.integer :target_time, null: false
+      t.string :level, null: false
 
       t.timestamps
     end

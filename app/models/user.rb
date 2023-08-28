@@ -18,6 +18,31 @@ class User < ApplicationRecord
 
   has_one_attached :profile_image
 
+  validates :name, presence: true, length: { in: 1..14 }
+  # validates :introduction, length: { in: 0..100 }
+
+
+  GUEST_USER_EMAIL = "guest@example.com"
+
+  def self.guest
+    find_or_create_by!(email: GUEST_USER_EMAIL) do |user|
+      user.password = SecureRandom.urlsafe_base64
+      user.name = "guestuser"
+    end
+  end
+
+  def guest_user?
+    email == GUEST_USER_EMAIL
+  end
+
+  def active_for_authentication?
+    super && !is_deleted?
+  end
+
+  def inactive_message
+    is_deleted? ? :deleted : super
+  end
+
 
   # ユーザーをフォローしているかどうかを判定するメソッド
   def following?(other_user)

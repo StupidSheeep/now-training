@@ -2,17 +2,23 @@
 <div class="container">
   <div class="row">
     <div class="col-md-6 offset-md-3">
-      <%= form_with(model: @user, url: update_profile_path, method: :patch, local: true, html: { multipart: true }) do |f| %>
+
+      <%= form_with model: @user, url: users_my_page_edit_path, method: :patch, local: true do |f| %>
         <div class="form-group">
-          <%= f.label :name %>
-          <%= f.text_field :name, class: "form-control" %>
-        </div>
-        <div class="form-group">
-          <%= f.label :profile_image %>
+          <%= f.label :アイコン %>
           <%= f.file_field :profile_image, class: "form-control-file" %>
         </div>
         <div class="form-group">
+          <%= f.label :ニックネーム %>
+          <%= f.text_field :name, class: "form-control" %>
+        </div>
+        <div class="form-group">
+          <%= f.label :自己紹介 %>
+          <%= f.text_area :introduction, class: "form-control", style: "resize: none;", rows: '5' %>
+        </div>
+        <div class="form-group">
           <%= f.submit "更新", class: "btn btn-primary" %>
+          <%= link_to "退会する", users_withdrawal_path, method: :patch, class: "btn btn-danger", data: { confirm: "本当に退会しますか？" } %>
         </div>
       <% end %>
     </div>
