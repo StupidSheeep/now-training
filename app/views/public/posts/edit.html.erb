@@ -1,28 +1,34 @@
-<h2>トレーニング内容の編集</h2>
 <div class="container">
-  <%= form_with model: @post, local: true do |form| %>
-    <div class="row">
-      <div>
-        <%= form.label :タイトル %>
-        <%= form.text_field :title, class: "form-control" %>
-      </div>
-      <div>
-        <%= form.label :目標時間 %>
-        <%= form.number_field :target_time, class: "form-control" %>
-      </div>
-      <div>
-        <%= form.label :難易度 %>
-        <%= form.collection_select :genre_id, Genre.all, :id, :name, { prompt: "選択してください" }, class: "form-control" %>
-      </div>
-      <div>
-        <%= form.label :内容 %>
-        <%= form.text_area :body, class: "form-control" %>
-      </div>
-    </div>
+  <h2 class="text-center mt-3">内容の編集</h2>
+  <div class="container mt-4">
 
-    <div class="actions">
-      <%= form.submit "更新", class: "btn btn-primary" %>
-      <%= link_to "戻る", post_path(@post), class: "btn btn-secondary" %>
-    </div>
-  <% end %>
+    <%= form_with model: @post, local: true do |f| %>
+      <div class="form-group">
+        <%= f.label :タイトル %>
+        <%= f.text_field :title, class: "form-control" %>
+      </div>
+      <div class="form-group row">
+        <div class="col">
+          <%= f.label :目標時間 %>
+          <%= f.number_field :target_time, class: "form-control" %>
+        </div>
+        <div class="col">
+          <%= f.label :難易度 %>
+          <%= f.select :level, options_for_select(["ビギナー", "スタンダード", "プロフェッショナル"], selected: @post.level), { prompt: "レベルを選択してください" }, class: "form-control" %>
+        </div>
+        <div class="col">
+          <%= f.label :ジャンル %>
+          <%= f.collection_select :genre_id, Genre.all, :id, :name, { prompt: "ジャンルを選択してください" }, class: "form-control" %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.label :内容 %>
+        <%= f.text_area :body, class: "form-control", rows:'10' %>
+      </div>
+      <div class="form-group">
+        <%= f.submit @post.new_record? ? '投稿' : '更新', class: "btn btn-success" %>
+        <%= link_to "戻る", @post, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
 </div>

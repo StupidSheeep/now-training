@@ -1,9 +1,19 @@
 class Public::PostsController < ApplicationController
+  before_action :authenticate_user!, except: [:index,:show,:search_results]
+  before_action :is_matching_login_user, only: [:edit, :update]
 
   def index
-    @post = Post.all
+    @genres = Genre.all
     @user = User.all
+    if params[:genre_id].present?
+      @selected_genre = Genre.find(params[:genre_id])
+      @post = @selected_genre.posts
+    else
+      @post = Post.all.order(created_at: :desc)
+    end
+    @post = @post.page(params[:page]).per(5) # ページネーションの追加
   end
+
 
   def show
     @post = Post.find(params[:id])
@@ -18,10 +28,10 @@ class Public::PostsController < ApplicationController
     @post = Post.new(post_params)
     @post.user_id = current_user.id
     if @post.save
-      redirect_to post_path(@post), notice: "You have created book successfully."
+      redirect_to post_path(@post), notice: "投稿が完了しました！"
     else
       @posts = Post.all
-      render 'index'
+      render 'new'
     end
 
   end
@@ -49,10 +59,31 @@ class Public::PostsController < ApplicationController
     end
   end
 
+  def search_results
+    @genres = Genre.all
+    if params[:search].present?
+      search_term = params[:search]
+      @search_results = Post.where("#{params[:search_target]} LIKE ?", "%#{search_term}%")
+
+      if params[:search_genre].present?
+        @search_results = @search_results.where(genre_id: params[:search_genre])
+      end
+    else
+      @search_results = []
+    end
+  end
+
   private
 
   def post_params
     params.require(:post).permit(:title, :body, :target_time, :level, :genre_id)
+  end
+
+  def is_matching_login_user
+    @post = Post.find(params[:id])
+    unless @post.user == current_user
+      redirect_to post_path(@post), alert: "他のユーザーの投稿は編集できません。"
+    end
   end
 
 

@@ -7,7 +7,7 @@ class Public::CommentsController < ApplicationController
     @post_comment.save
     redirect_to post_path(@post)
   end
-  
+
 
   def destroy
     @post_comment = Comment.find_by(id: params[:id], post_id: params[:post_id])

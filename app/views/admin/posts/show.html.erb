@@ -40,20 +40,12 @@
     <div class="post-details">
       <h2>トレーニング内容</h2>
       <div>
-        <label>タイトル</label>
-        <%= @post.title %>
+        <h3><%= @post.title %></h3>
       </div>
       <div>
-        <label>目標時間</label>
-        <%= @post.target_time %>分
-      </div>
-      <div>
-        <label>難易度</label>
-        <%= @post.level %>
-      </div>
-      <div>
-        <label>トレーニングジャンル</label>
-        <%= @post.genre.name %>
+        <span><label>目標時間</label><%= @post.target_time %>分</span>
+        <span><label>難易度</label><%= @post.level %></span>
+        <span><label>トレーニングジャンル</label><%= @post.genre.name %></span>
       </div>
       <div>
         <label>内容</label>
@@ -64,16 +56,12 @@
         <%= @post.created_at.strftime('%Y年%m月%d日') %>
       </div>
     </div>
+
     <div class="comments-list">
       <h4 class="comments-title">コメントリスト</h4>
       <div class="comment">
-        <%= render "public/comments/list", post: @post  %>
+        <%= render "admin/comments/list", post: @post  %>
       </div>
-      <% if user_signed_in? %>
-        <div id="post_comment">
-          <%= render "public/comments/comment", post: @post %>
-        </div>
-      <% end %>
     </div>
   </div>
   <div class="container">

@@ -7,6 +7,12 @@ class Post < ApplicationRecord
 
   has_one_attached :post_image
 
+  validates :title, presence: true
+  validates :target_time, presence: true
+  validates :level, presence: true
+  validates :genre_id, presence: true
+  validates :body, presence: true
+
   def get_post_image(width, height)
     unless item_image.attached?
       file_path = Rails.root.join('app/assets/images/no_image.jpg')
