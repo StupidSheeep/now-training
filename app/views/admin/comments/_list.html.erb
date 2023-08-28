@@ -1,0 +1,55 @@
+<div class="comments-list bottom-overflow" style="max-height: 300px; overflow: auto;">
+
+  <% post.comments.reverse_each do |comment| %>
+    <div class="media mb-2 comment">
+      <div class="media-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div class="d-flex align-items-center">
+            <%= link_to users_my_page_path(comment.user) do %>
+              <% if comment.user.profile_image.attached? %>
+                <%= image_tag comment.user.profile_image, class: "rounded-circle user-avatar rounded", size: "45x45" %>
+              <% else %>
+                <%= image_tag comment.user.get_profile_image(45, 45), class: "rounded-circle user-avatar" %><br>
+              <% end %>
+            <% end %>
+            <div class="ms-2 ml-2">
+              <%= comment.user.name %>
+            </div>
+          </div>
+        </div>
+        <%= comment.post_comment.gsub(/\n/, '<br>').html_safe %>
+        <div class="d-flex justify-content-between align-items-center mt-2">
+          <div>
+            <span class="me-2" style="font-size: 12px; color: #999;">
+              <%= formatted_time(comment.created_at) %>
+            </span>
+          </div>
+          <div>
+            <%= link_to "[×]", admin_comment_path(comment), method: :delete, class: "btn btn-sm", remote: true, data: { "turbolinks" => false } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <style>
+  /* .bottom-overflow スタイル */
+  .bottom-overflow {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  /* コメントリストのスタイル */
+  .comments-list {
+    border: 1px solid #ccc;
+    padding: 1rem;
+  }
+
+  /* コメントのスタイル */
+  .comment {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+  }
+
+</style>
+</div>

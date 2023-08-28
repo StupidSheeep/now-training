@@ -1,0 +1,168 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-12">
+
+      <div class="row">
+        <div class="mt-5 col-md-4 d-flex flex-column align-items-center text-center">
+          <% if @user.profile_image.attached? %>
+            <%= image_tag @user.profile_image, class: "rounded-circle rounded user-avatar", size: "250x250" %><br>
+          <% else %>
+            <%= image_tag @user.get_profile_image(250, 250), class: "rounded-circle user-avatar" %><br>
+          <% end %>
+          <h2 class="mt-3 mb-3"><%= @user.name %></h2>
+          <h5>自己紹介</h5>
+          <p><%= simple_format(@user.introduction) %></p>
+          <% unless @user.guest_user? %>
+            <% if @user == current_user %>
+              <%= link_to "プロフィール編集", users_my_page_edit_path(@user.id), class: "btn btn-primary" %>
+            <% end %>
+          <% end %>
+          <% if current_user != @user %>
+            <% if current_user.following?(@user) %>
+              <%= link_to "アンフォロー", relationship_path(current_user.active_relationships.find_by(followed_id: @user.id)), method: :delete , class: "btn btn-info"%>
+            <% else %>
+              <%= link_to "フォロー", relationships_path(followed_id: @user.id), method: :post , class: "btn btn-info"%>
+            <% end %>
+          <% end %>
+        </div>
+
+        <div class="col-md-8">
+          <h1 class="text-center mt-5 mb-5"><%= @user.name %>のマイページ</h1>
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="home-tab" data-toggle="tab" href="#posts" role="tab" aria-controls="posts" aria-selected="true">投稿一覧</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="bookmark-tab" data-toggle="tab" href="#bookmark" role="tab" aria-controls="bookmark" aria-selected="false">ブックマーク</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="followed-tab" data-toggle="tab" href="#followed" role="tab" aria-controls="followed" aria-selected="false">フォロー</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="follower-tab" data-toggle="tab" href="#follower" role="tab" aria-controls="follower" aria-selected="false">フォロワー</a>
+            </li>
+          </ul>
+          <div class="tab-content px-3 py-4" id="myTabContent">
+            <!-- 投稿一覧タブ-->
+            <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
+              <% @user.posts.reverse_each do |post| %>
+                <div class="col-md-12 mb-4">
+                  <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><strong><%= post.title %></strong></h5>
+                        <p class="card-text">
+                          <span class="mr-3"><strong>目標時間:</strong> <%= post.target_time %>分</span>
+                          <span class="mr-3"><strong>難易度:</strong> <%= post.level %></span>
+                          <span><strong>ジャンル:</strong> <%= post.genre.name %></span>
+                        </p>
+                        <p class="card-text">
+                        <span class="mr-3"><strong>コメント数:</strong> <%= post.comments.count %></span>
+                        <span class="mr-3"><strong>ブックマーク数:</strong> <%= post.bookmarks.count %></span>
+                        </p>
+                        <% if current_user.bookmarks.exists?(post_id: post.id) %>
+                          <%= link_to "ブックマークを外す", post_bookmarks_path(post, current_user.bookmarks.find_by(post: post)), method: :delete, class: "btn btn-outline-danger" %>
+                        <% else %>
+                          <%= link_to "ブックマーク", post_bookmarks_path(post), method: :post, class: "btn btn-primary" %>
+                        <% end %>
+                        <%= link_to "内容を見る", post_path(post), class: "btn btn-info" %>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+            <!-- ブックマークタブ-->
+            <div class="tab-pane fade" id="bookmark" role="tabpanel" aria-labelledby="bookmark-tab">
+              <% @bookmarks.reverse_each do |post| %>
+                <div class="col-md-12 mb-4">
+                  <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><strong><%= post.title %></strong></h5>
+                        <p class="card-text">
+                          <span class="mr-3"><strong>目標時間:</strong> <%= post.target_time %>分</span>
+                          <span class="mr-3"><strong>難易度:</strong> <%= post.level %></span>
+                          <span><strong>ジャンル:</strong> <%= post.genre.name %></span>
+                        </p>
+                        <p class="card-text">
+                        <span class="mr-3"><strong>投稿者：</strong><%= post.user.name %>
+                        <span class="mr-3 ml-3"><strong>コメント数:</strong> <%= post.comments.count %></span>
+                        <span class="mr-3"><strong>ブックマーク数:</strong> <%= post.bookmarks.count %></span>
+                        </p>
+                        <% if current_user.bookmarks.exists?(post_id: post.id) %>
+                          <%= link_to "ブックマークを外す", post_bookmarks_path(post, current_user.bookmarks.find_by(post: post)), method: :delete, class: "btn  btn-outline-danger" %>
+                        <% else %>
+                          <%= link_to "ブックマーク", post_bookmarks_path(post), method: :post, class: "btn btn-primary" %>
+                        <% end %>
+                        <%= link_to "内容を見る", post_path(post), class: "btn btn-info" %>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+            <!-- フォロータブ-->
+            <div class="tab-pane fade" id="followed" role="tabpanel" aria-labelledby="followed-tab">
+              <h3><%= @user.name %>のフォロー覧</h3>
+              <% @user.following.each do |following_user| %>
+                <div class="col-md-7 mb-4">
+                  <div class="card">
+                    <div class="card-body d-flex align-items-center">
+                      <div class="d-flex align-items-center">
+                        <%= link_to users_my_page_path(following_user), class: "d-flex align-items-center" do %>
+                          <%= image_tag following_user.get_profile_image(80,80), class: "rounded-circle user-avatar me-3" %>
+                        <% end %>
+                      </div>
+                      <div class="ml-3">
+                        <p class="mb-0 h5"><%= link_to following_user.name, users_my_page_path(following_user) %></p>
+                        <p class="mb-0">
+                          <span class="mr-2"><strong>フォロー数:</strong><%= following_user.following_count %></span>
+                          <span><strong>フォロワー数:</strong><%= following_user.followers_count %></span>
+                        </p>
+                          <% if current_user != following_user %>
+                            <% if current_user.following?(following_user) %>
+                              <%= link_to "アンフォロー", relationship_path(current_user.active_relationships.find_by(followed_id: following_user.id)), method: :delete , class: "btn-sm btn-info"%>
+                            <% else %>
+                              <%= link_to "フォロー", relationships_path(followed_id: following_user.id), method: :post , class: "btn-sm btn-info"%>
+                            <% end %>
+                          <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+            <!-- フォロワータブ-->
+            <div class="tab-pane fade" id="follower" role="tabpanel" aria-labelledby="follower-tab">
+              <h3><%= @user.name %>のフォロワー覧</h3>
+              <% @user.followers.each do |follower_user| %>
+                <div class="col-md-7 mb-4">
+                  <div class="card">
+                    <div class="card-body d-flex align-items-center">
+                      <div class="d-flex align-items-center">
+                        <%= link_to users_my_page_path(follower_user) do %>
+                          <%= image_tag follower_user.get_profile_image(80,80), class: "rounded-circle user-avatar" %>
+                        <% end %>
+                      </div>
+                      <div class="ml-3">
+                        <p class="mb-0 h5"><%= link_to follower_user.name, users_my_page_path(follower_user) %></p>
+                        <p class="mb-0">
+                          <span class="mr-2"><strong>フォロー数:</strong><%= follower_user.following_count %></span>
+                          <span><strong>フォロワー数:</strong><%= follower_user.followers_count %></span>
+                        </p>
+                          <% if current_user != follower_user %>
+                            <% if current_user.following?(follower_user) %>
+                              <%= link_to "アンフォロー", relationship_path(current_user.active_relationships.find_by(followed_id: follower_user.id)), method: :delete , class: "btn-sm btn-info"%>
+                            <% else %>
+                              <%= link_to "フォロー", relationships_path(followed_id: follower_user.id), method: :post , class: "btn-sm btn-info"%>
+                            <% end %>
+                          <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
