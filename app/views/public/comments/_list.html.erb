@@ -23,6 +23,7 @@
             <span class="me-2" style="font-size: 12px; color: #999;">
               <%= formatted_time(comment.created_at) %>
             </span>
+            <span class="sentiment-score ml-2" style="font-size: 10px; color: #999;">感情分析スコア<%= comment.score %></span> <!-- AIカリキュラム -->
           </div>
           <div>
             <% if comment.user == current_user %>
