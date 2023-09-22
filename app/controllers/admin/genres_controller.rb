@@ -15,22 +15,23 @@ class Admin::GenresController < ApplicationController
     if @genre.save
       redirect_to admin_genres_path, notice: 'Genre created successfully.'
     else
-      render :new
+      @genres = Genre.order(created_at: :desc)
+      render :index
     end
   end
 
-  def edit
-    @genre = Genre.find(params[:id])
-  end
+  # def edit
+  #   @genre = Genre.find(params[:id])
+  # end
 
-  def update
-    @genre = Genre.find(params[:id])
-    if @genre.update(genre_params)
-      redirect_to admin_genres_path, notice: 'Genre updated successfully.'
-    else
-      render :edit
-    end
-  end
+  # def update
+  #   @genre = Genre.find(params[:id])
+  #   if @genre.update(genre_params)
+  #     redirect_to admin_genres_path, notice: 'Genre updated successfully.'
+  #   else
+  #     render :edit
+  #   end
+  # end
 
   def destroy
     @genre = Genre.find(params[:id])
