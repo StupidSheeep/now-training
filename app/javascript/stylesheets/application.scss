@@ -1,1 +1,38 @@
 @use '~bootstrap/scss/bootstrap';
+// pubilc&admin posts/show.html.erb
+  .post-details {
+    padding: 2rem;
+  }
+
+  .comments-list {
+    border: 1px solid #ccc;
+    padding: 1rem;
+  }
+
+  .comment {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .comments-title {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+
+// pubilc&admin comments/_list.html.erb
+  .bottom-overflow {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .comments-list {
+    border: 1px solid #ccc;
+    padding: 1rem;
+  }
+
+  .comment {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+  }

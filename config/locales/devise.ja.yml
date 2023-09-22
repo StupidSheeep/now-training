@@ -28,6 +28,8 @@ ja:
         updated_at: 更新日
     models:
       user: ユーザー
+      post: 投稿
+      genre: ジャンル名
   devise:
     confirmations:
       confirmed: メールアドレスが確認できました。

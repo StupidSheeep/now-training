@@ -1,7 +1,7 @@
 <div class="container">
   <h2 class="text-center mt-3">新規投稿</h2>
   <div class="container mt-4">
-
+    <%= render "public/shared/error_messages", resource: @post %>
     <%= form_with model: @post, local:true do |f| %>
       <div class="form-group">
         <%= f.label :タイトル %>
@@ -9,8 +9,8 @@
       </div>
       <div class="form-row">
         <div class="col">
-          <%= f.label :目標時間 %>
-          <%= f.text_field :target_time, class: "form-control" %>
+          <%= f.label :目標時間 %>(分)
+          <%= f.number_field :target_time, class: "form-control" %>
         </div>
         <div class="col">
           <%= f.label :難易度 %>

@@ -27,32 +27,11 @@
           </div>
           <div>
             <% if comment.user == current_user %>
-              <%= link_to "[×]", post_comment_path(post, comment), method: :delete, class: "btn btn-sm", remote: true, data: { "turbolinks" => false } %>
+              <%= link_to "[×]", post_comment_path(post, comment), method: :delete, class: "btn btn-sm","data-confirm" => "本当に削除しますか？", remote: true, data: { "turbolinks" => false } %>
             <% end %>
           </div>
         </div>
       </div>
     </div>
   <% end %>
-  <style>
-  /* .bottom-overflow スタイル */
-  .bottom-overflow {
-    display: flex;
-    flex-direction: column-reverse;
-  }
-
-  /* コメントリストのスタイル */
-  .comments-list {
-    border: 1px solid #ccc;
-    padding: 1rem;
-  }
-
-  /* コメントのスタイル */
-  .comment {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 1rem;
-    margin-bottom: 1rem;
-  }
-
-</style>
 </div>
