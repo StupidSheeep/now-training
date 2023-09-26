@@ -12,7 +12,6 @@ class Public::UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @bookmarks = @user.bookmarks.map(&:post)
-
   end
 
   def edit

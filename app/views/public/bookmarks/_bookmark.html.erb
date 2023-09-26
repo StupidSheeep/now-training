@@ -1,0 +1,7 @@
+<% if current_user && current_user != post.user%>
+  <% if current_user.bookmarks.exists?(post_id: post.id) %>
+    <%= link_to "ブックマークを外す", post_bookmarks_path(post, current_user.bookmarks.find_by(post: post)), method: :delete, remote: true, data: {"turbolinks" => false}, class: "btn btn-outline-danger"  %>
+  <% else %>
+    <%= link_to "ブックマーク", post_bookmarks_path(post), method: :post, remote: true, data: {"turbolinks" => false}, class: "btn btn-outline-primary" %>
+  <% end %>
+<% end %>

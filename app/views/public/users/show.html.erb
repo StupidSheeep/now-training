@@ -17,13 +17,9 @@
               <%= link_to "プロフィール編集", users_my_page_edit_path(@user.id), class: "btn btn-primary" %>
             <% end %>
           <% end %>
-          <% if current_user != @user %>
-            <% if current_user.following?(@user) %>
-              <%= link_to "アンフォロー", relationship_path(current_user.active_relationships.find_by(followed_id: @user.id)), method: :delete , class: "btn btn-info"%>
-            <% else %>
-              <%= link_to "フォロー", relationships_path(followed_id: @user.id), method: :post , class: "btn btn-info"%>
-            <% end %>
-          <% end %>
+          <span id="following_buttons_profile_<%= @user.id %>">
+            <%= render "public/relationships/follow_btn_profile", following_user: @user %>
+          </span>
         </div>
 
         <div class="col-md-8">
@@ -59,11 +55,9 @@
                         <span class="mr-3"><strong>コメント数:</strong> <%= post.comments.count %></span>
                         <span class="mr-3"><strong>ブックマーク数:</strong> <%= post.bookmarks.count %></span>
                         </p>
-                        <% if current_user.bookmarks.exists?(post_id: post.id) %>
-                          <%= link_to "ブックマークを外す", post_bookmarks_path(post, current_user.bookmarks.find_by(post: post)), method: :delete, class: "btn btn-outline-danger" %>
-                        <% else %>
-                          <%= link_to "ブックマーク", post_bookmarks_path(post), method: :post, class: "btn btn-primary" %>
-                        <% end %>
+                        <span id="bookmark_buttons_<%= post.id %>">
+                          <%= render "public/bookmarks/bookmark", post: post %>
+                        </span>
                         <%= link_to "内容を見る", post_path(post), class: "btn btn-info" %>
                     </div>
                   </div>
@@ -87,11 +81,9 @@
                         <span class="mr-3 ml-3"><strong>コメント数:</strong> <%= post.comments.count %></span>
                         <span class="mr-3"><strong>ブックマーク数:</strong> <%= post.bookmarks.count %></span>
                         </p>
-                        <% if current_user.bookmarks.exists?(post_id: post.id) %>
-                          <%= link_to "ブックマークを外す", post_bookmarks_path(post, current_user.bookmarks.find_by(post: post)), method: :delete, class: "btn  btn-outline-danger" %>
-                        <% else %>
-                          <%= link_to "ブックマーク", post_bookmarks_path(post), method: :post, class: "btn btn-primary" %>
-                        <% end %>
+                        <span id="bookmark_buttons_<%= post.id %>">
+                          <%= render "public/bookmarks/bookmark", post: post %>
+                        </span>
                         <%= link_to "内容を見る", post_path(post), class: "btn btn-info" %>
                     </div>
                   </div>
@@ -113,16 +105,12 @@
                       <div class="ml-3">
                         <p class="mb-0 h5"><%= link_to following_user.name, users_my_page_path(following_user) %></p>
                         <p class="mb-0">
-                          <span class="mr-2"><strong>フォロー数:</strong><%= following_user.following_count %></span>
-                          <span><strong>フォロワー数:</strong><%= following_user.followers_count %></span>
+                          <span class="mr-2",id="follow_count_<%= following_user.id %>"><strong>フォロー数:</strong><%= following_user.following_count %></span>
+                          <span id="follower_count_<%= following_user.id %>"><strong>フォロワー数:</strong><%= following_user.followers_count %></span>
                         </p>
-                          <% if current_user != following_user %>
-                            <% if current_user.following?(following_user) %>
-                              <%= link_to "アンフォロー", relationship_path(current_user.active_relationships.find_by(followed_id: following_user.id)), method: :delete , class: "btn-sm btn-info"%>
-                            <% else %>
-                              <%= link_to "フォロー", relationships_path(followed_id: following_user.id), method: :post , class: "btn-sm btn-info"%>
-                            <% end %>
-                          <% end %>
+                        <span id="following_buttons_<%= following_user.id %>">
+                          <%= render "public/relationships/follow_btn_tab", following_user: following_user %>
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -144,27 +132,23 @@
                       <div class="ml-3">
                         <p class="mb-0 h5"><%= link_to follower_user.name, users_my_page_path(follower_user) %></p>
                         <p class="mb-0">
-                          <span class="mr-2"><strong>フォロー数:</strong><%= follower_user.following_count %></span>
-                          <span><strong>フォロワー数:</strong><%= follower_user.followers_count %></span>
+                          <span class="mr-2",id="follow_count_<%= follower_user.id %>"><strong>フォロー数:</strong><%= follower_user.following_count %></span>
+                          <span id="follower_count_<%= follower_user.id %>"><strong>フォロワー数:</strong><%= follower_user.followers_count %></span>
                         </p>
-                          <% if current_user != follower_user %>
-                            <% if current_user.following?(follower_user) %>
-                              <%= link_to "アンフォロー", relationship_path(current_user.active_relationships.find_by(followed_id: follower_user.id)), method: :delete , class: "btn-sm btn-info"%>
-                            <% else %>
-                              <%= link_to "フォロー", relationships_path(followed_id: follower_user.id), method: :post , class: "btn-sm btn-info"%>
-                            <% end %>
-                          <% end %>
+                        <span id="follower_buttons_<%= follower_user.id %>">
+                          <%= render "public/relationships/follow_btn_tab", following_user: follower_user %>
+                        </span>
                       </div>
                     </div>
                   </div>
                 </div>
               <% end %>
             </div>
-            
+
           </div>
         </div>
       </div>
-      
+
     </div>
   </div>
 </div>
