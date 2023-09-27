@@ -103,11 +103,15 @@
                         <% end %>
                       </div>
                       <div class="ml-3">
-                        <p class="mb-0 h5"><%= link_to following_user.name, users_my_page_path(following_user) %></p>
-                        <p class="mb-0">
-                          <span class="mr-2",id="follow_count_<%= following_user.id %>"><strong>フォロー数:</strong><%= following_user.following_count %></span>
-                          <span id="follower_count_<%= following_user.id %>"><strong>フォロワー数:</strong><%= following_user.followers_count %></span>
+
+                        <p class="mb-0 h5">
+                          <%= link_to following_user.name, users_my_page_path(following_user) %>
                         </p>
+
+                        <span class="mr-2">
+                          <strong>投稿数:</strong><%= following_user.posts.count %>
+                        </span>
+
                         <span id="following_buttons_<%= following_user.id %>">
                           <%= render "public/relationships/follow_btn_tab", following_user: following_user %>
                         </span>
@@ -130,11 +134,14 @@
                         <% end %>
                       </div>
                       <div class="ml-3">
-                        <p class="mb-0 h5"><%= link_to follower_user.name, users_my_page_path(follower_user) %></p>
-                        <p class="mb-0">
-                          <span class="mr-2",id="follow_count_<%= follower_user.id %>"><strong>フォロー数:</strong><%= follower_user.following_count %></span>
-                          <span id="follower_count_<%= follower_user.id %>"><strong>フォロワー数:</strong><%= follower_user.followers_count %></span>
+                        <p class="mb-0 h5">
+                          <%= link_to follower_user.name, users_my_page_path(follower_user) %>
                         </p>
+
+                        <span class="mr-2">
+                          <strong>投稿数:</strong><%= follower_user.posts.count %>
+                        </span>
+
                         <span id="follower_buttons_<%= follower_user.id %>">
                           <%= render "public/relationships/follow_btn_tab", following_user: follower_user %>
                         </span>
