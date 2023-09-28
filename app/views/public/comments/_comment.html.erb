@@ -1,4 +1,4 @@
-<%= form_with model: [post, Comment.new], local: true do |f| %>
-  <%= f.text_area :post_comment, rows: '5', class: "form-control mb-1", style: "resize: none;" %>
+<%= form_with model: [post, Comment.new], local: false do |f| %>
+  <%= f.text_area :post_comment, rows: '5', class: "form-control mb-1", style: "resize: none;", id: "comment_textarea" %>
   <%= f.submit "コメント" %>
 <% end %>

@@ -19,7 +19,7 @@ class User < ApplicationRecord
   has_one_attached :profile_image
 
   validates :name, presence: true, length: { in: 1..14 }
-  # validates :introduction, length: { in: 0..100 }
+  validates :introduction, length: { maximum: 100 }
 
 
   GUEST_USER_EMAIL = "guest@example.com"

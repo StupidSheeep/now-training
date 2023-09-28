@@ -10,7 +10,6 @@ class Post < ApplicationRecord
   validates :title, presence: true
   validates :target_time, presence: true
   validates :level, presence: true
-  # validates :genre_id, presence: true(belongs to)
   validates :body, presence: true
 
   def get_post_image(width, height)

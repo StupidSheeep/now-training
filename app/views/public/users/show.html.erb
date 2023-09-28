@@ -11,10 +11,16 @@
           <% end %>
           <h2 class="mt-3 mb-3"><%= @user.name %></h2>
           <h5>自己紹介</h5>
-          <p><%= simple_format(@user.introduction) %></p>
+
+          <% unless @user.introduction.blank? %>
+            <div class="border p-3" style="max-width: 300px; word-wrap: break-word;"> <!-- 横幅を300pxに設定し、半角英数字でも改行する -->
+              <p><%= simple_format(@user.introduction) %></p>
+            </div>
+          <% end %>
+
           <% unless @user.guest_user? %>
             <% if @user == current_user %>
-              <%= link_to "プロフィール編集", users_my_page_edit_path(@user.id), class: "btn btn-primary" %>
+              <%= link_to "プロフィール編集", users_my_page_edit_path(@user.id), class: "btn btn-primary mt-3 mb-5", data: {"turbolinks"=>false} %>
             <% end %>
           <% end %>
           <span id="following_buttons_profile_<%= @user.id %>">
