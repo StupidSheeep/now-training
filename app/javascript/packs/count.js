@@ -25,3 +25,4 @@ $(document).on("turbolinks:load", function () {
     localStorage.setItem('introductionLength', introductionLength);
   });
 });
+
