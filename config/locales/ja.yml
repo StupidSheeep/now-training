@@ -10,6 +10,8 @@ ja:
         body: '内容'
       genre:
         name: 'ジャンル名'
+      user:
+        introduction: '自己紹介'
     errors:
       messages:
         record_invalid: 'バリデーションに失敗しました: %{errors}'

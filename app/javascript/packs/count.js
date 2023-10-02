@@ -1,28 +1,21 @@
-/*global $*/
-$(document).on("turbolinks:load", function () {
-  const Introduction = document.getElementById('introduction-text');
-  const countIntroduction = document.getElementById('introduction-count');
+document.addEventListener("DOMContentLoaded", function () {
+  const introductionText = document.getElementById("introduction-text");
+  const introductionCount = document.getElementById("introduction-count");
 
-  // ページが読み込まれた際に前回の文字数を復元する
-  const savedLength = localStorage.getItem('introductionLength');
-  if (savedLength !== null) {
-    Introduction.value = savedLength;
-    countIntroduction.innerHTML = `${savedLength}文字`;
-  }
+  // 初期文字数を設定
+  const initialCharCount = introductionText.value.length;
+  introductionCount.textContent = initialCharCount + "文字";
 
-  Introduction.addEventListener("input", () => {
-    let introductionLength = Introduction.value.length;
-    if (introductionLength > 100) {
-      introductionLength = 100;
-      countIntroduction.style.color = 'red'; // 赤色に設定
+  introductionText.addEventListener("input", function () {
+    const inputText = introductionText.value;
+    const charCount = inputText.length;
+
+    introductionCount.textContent = charCount + "文字";
+
+    if (charCount > 100) {
+      introductionCount.style.color = "red"; // 文字色を赤に変更
     } else {
-      countIntroduction.style.color = ''; // 色をリセット
+      introductionCount.style.color = "grey"; // 文字色を元に戻す
     }
-    countIntroduction.innerHTML = `${introductionLength}文字`;
-
-    // 文字数をローカルストレージに保存
-    /*  global localStorage */
-    localStorage.setItem('introductionLength', introductionLength);
   });
 });
-

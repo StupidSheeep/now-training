@@ -3,7 +3,7 @@
 <div class="container">
   <div class="row">
     <div class="col-md-6 offset-md-3">
-
+      <%= render "public/shared/error_messages", resource: @user %>
       <%= form_with model: @user, url: users_my_page_edit_path, method: :patch, local: true do |f| %>
 
         <div class="form-group">
