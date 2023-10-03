@@ -1,21 +1,20 @@
-document.addEventListener("DOMContentLoaded", function () {
+// ページが読み込まれたときと、テキストが入力されたときの両方で初期文字数と文字色を設定
+function updateCharCount() {
   const introductionText = document.getElementById("introduction-text");
   const introductionCount = document.getElementById("introduction-count");
 
-  // 初期文字数を設定
-  const initialCharCount = introductionText.value.length;
-  introductionCount.textContent = initialCharCount + "文字";
+  const charCount = introductionText.value.length;
+  introductionCount.textContent = charCount + "文字";
 
-  introductionText.addEventListener("input", function () {
-    const inputText = introductionText.value;
-    const charCount = inputText.length;
+  if (charCount > 100) {
+    introductionCount.style.color = "red"; // 文字色を赤に変更
+  } else {
+    introductionCount.style.color = "black"; // 文字色を元に戻す
+  }
+}
 
-    introductionCount.textContent = charCount + "文字";
+document.addEventListener("DOMContentLoaded", updateCharCount);
 
-    if (charCount > 100) {
-      introductionCount.style.color = "red"; // 文字色を赤に変更
-    } else {
-      introductionCount.style.color = "grey"; // 文字色を元に戻す
-    }
-  });
-});
+// テキストが入力されたときにも呼び出す
+const introductionText = document.getElementById("introduction-text");
+introductionText.addEventListener("input", updateCharCount);
