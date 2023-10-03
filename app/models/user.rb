@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  before_validation :trim_introduction
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
@@ -67,13 +68,19 @@ class User < ApplicationRecord
     following.count
   end
 
-
   def get_profile_image(width, height)
     unless profile_image.attached?
       file_path = Rails.root.join('app/assets/images/no_image.jpg')
       profile_image.attach(io: File.open(file_path), filename: 'no-image.jpg', content_type: 'image/jpeg')
     end
     profile_image.variant(resize_to_limit: [width, height]).processed
+  end
+
+  private
+
+  def trim_introduction
+    # Introductionに対してgsubメソッドを使用して、改行やスペースを1文字に置換する
+    self.introduction = self.introduction.gsub(/[\r\n\s　]+/, ' ')
   end
 
 end
