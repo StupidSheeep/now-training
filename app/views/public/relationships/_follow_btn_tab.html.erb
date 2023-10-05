@@ -2,6 +2,6 @@
   <% if current_user.following?(following_user) %>
     <%= link_to "アンフォロー", relationship_path(current_user.active_relationships.find_by(followed_id: following_user.id)), method: :delete, remote: true, data: {"turbolinks" => false}, class: "btn-sm btn-info" %>
   <% else %>
-    <%= link_to "フォロー", relationships_path(followed_id: following_user.id), method: :post,remote: true, data: {"turbolinks" => false}, class: "btn-sm btn-info" %>
+    <%= link_to "フォロー", relationships_path(followed_id: following_user.id), method: :post, remote: true, data: {"turbolinks" => false}, class: "btn-sm btn-info" %>
   <% end %>
 <% end %>

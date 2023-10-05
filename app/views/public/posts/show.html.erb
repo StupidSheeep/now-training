@@ -31,7 +31,7 @@
       <div class="col-md-4 mt-5"> <!-- コメントのカラム -->
         <div class="comments-list">
           <h4 class="comments-title">コメントリスト</h4>
-          <div class="comment",id="comment_list">
+          <div class="comment", id="comment_list">
             <%= render "public/comments/list", post: @post %>
           </div>
           <% if user_signed_in? %>
