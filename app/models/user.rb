@@ -1,9 +1,9 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  before_validation :trim_introduction
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+  before_validation :trim_introduction
 
 
   # 他のユーザーをフォローしている関係
@@ -79,8 +79,10 @@ class User < ApplicationRecord
   private
 
   def trim_introduction
-    # Introductionに対してgsubメソッドを使用して、改行やスペースを1文字に置換する
-    self.introduction = self.introduction.gsub(/[\r\n\s　]+/, ' ')
+    if introduction.present?
+      # Introductionに対してgsubメソッドを使用して、改行やスペースを1文字に置換する
+      self.introduction = self.introduction.gsub(/[\r\n\s　]+/, ' ')
+    end
   end
 
 end

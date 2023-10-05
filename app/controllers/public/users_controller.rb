@@ -3,11 +3,11 @@ class Public::UsersController < ApplicationController
    before_action :is_matching_login_user, only: [:edit, :update]
    before_action :ensure_guest_user, only: [:edit]
   # before_action :set_user, except: [:index]
+  # before_action :trim_introduction
 
   def index
     redirect_to new_user_registration_path
   end
-
 
   def show
     @user = User.find(params[:id])
@@ -58,5 +58,10 @@ class Public::UsersController < ApplicationController
       redirect_to user_path(current_user) , notice: "ゲストユーザーはプロフィール編集画面へ遷移できません。"
     end
   end
+
+  # def trim_introduction
+  #   # Introductionに対してgsubメソッドを使用して、改行やスペースを1文字に置換する
+  #   introduction = introduction.gsub(/[\r\n\s　]+/, ' ')
+  # end
 
 end
