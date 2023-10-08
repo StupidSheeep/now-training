@@ -18,9 +18,6 @@ class Public::PostsController < ApplicationController
   def show
     @post = Post.find(params[:id])
     @post_comment = Comment.new
-    # @post_comment = @post.comments.new(post_comment_params)
-    # @post_comment.user = current_user
-    # @post_comment.score = Language.get_data(post_comment_params[:post_comment])
   end
 
   def new
