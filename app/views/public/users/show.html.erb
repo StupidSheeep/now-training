@@ -13,7 +13,7 @@
           <h5>自己紹介</h5>
 
           <% unless @user.introduction.blank? %>
-            <div class="border p-3" style="max-width: 300px; word-wrap: break-word;"> <!-- 横幅を300pxに設定し、半角英数字でも改行する -->
+            <div class="border p-3 mb-5" style="max-width: 300px; word-wrap: break-word;"> <!-- 横幅を300pxに設定し、半角英数字でも改行する -->
               <p><%= simple_format(@user.introduction) %></p>
             </div>
           <% end %>
