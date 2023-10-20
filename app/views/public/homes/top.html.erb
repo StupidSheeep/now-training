@@ -25,15 +25,18 @@
             <div class="col-md-10">
               <div class="card-body">
                 <h5 class="card-title"><%= post.title %></h5>
+
                 <p class="card-text">
                   <span class="mr-3"><strong>目標時間：</strong><%= post.target_time %> 分</span>
                   <span class="mr-3"><strong>トレーニングジャンル：</strong><%= post.genre.name %></span>
                   <span class="mr-3"><strong>難易度：</strong><%= post.level %></span>
                 </p>
+
                 <p class="card-text">
                   <span class="mr-3"><strong>コメント数:</strong> <%= post.comments.count %></span>
                   <span class="mr-3"><strong>ブックマーク数:</strong> <%= post.bookmarks.count %></span>
                 </p>
+
                 <div class="action-buttons">
                   <span id="bookmark_buttons_<%= post.id %>">
                     <%= render "public/bookmarks/bookmark", post: post %>
